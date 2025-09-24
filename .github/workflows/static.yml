@@ -1,3 +1,4 @@
+# .github/workflows/static.yml
 name: Deploy static content to Pages
 
 on:
@@ -15,36 +16,30 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      # Prevent Jekyll from hiding files/folders that start with "_"
-      - name: Add .nojekyll
-        run: touch src/.nojekyll
-      # (Optional, for single-page apps that need history fallback)
-      # - name: Add 404 fallback
-      #   run: cp src/index.html src/404.html
-      - name: Install dependencies
-        run: npm ci
-      - name: Build
-        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # OPTIONAL: if you need to compile SCSS to CSS before publishing,
+      # do it here and write output back into src/css/main.css
+
+      - name: (Optional) SPA 404 fallback
+        run: |
+          if [ -f src/index.html ]; then cp src/index.html src/404.html; fi
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build
-  # single deploy job
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
+          path: 'src'   # <-- serve the folder that actually has index.html
+
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
