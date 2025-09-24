@@ -21,6 +21,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,17 +29,39 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # OPTIONAL: if you need to compile SCSS to CSS before publishing,
-      # do it here and write output back into src/css/main.css
+      # Build CSS from SCSS (only if SCSS exists)
+      - name: Install Sass and compile
+        run: |
+          if [ -f src/css/main.scss ]; then
+            npm i -g sass
+            sass src/css/main.scss src/css/main.css
+          fi
 
-      - name: (Optional) SPA 404 fallback
+      # If your HTML still points to .scss, rewrite it to .css
+      - name: Ensure HTML links to CSS, not SCSS
+        run: |
+          if [ -f src/index.html ]; then
+            sed -i 's#href="./css/main.scss"#href="./css/main.css"#g' src/index.html
+          fi
+
+      # SPA fallback (optional)
+      - name: 404 fallback
         run: |
           if [ -f src/index.html ]; then cp src/index.html src/404.html; fi
+
+      # Sanity check (debug)
+      - name: List publish files
+        run: |
+          echo "Publishing these files:"
+          ls -la src
+          [ -d src/css ] && ls -la src/css || true
+          [ -d src/js ] && ls -la src/js || true
+          [ -d src/assets ] && ls -la src/assets || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'src'   # <-- serve the folder that actually has index.html
+          path: 'src'
 
       - name: Deploy to GitHub Pages
         id: deployment
