@@ -1,13 +1,173 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>MP1</title>
-    </head>
-    <body>
-        <h1>Hello World! Welcome to MP1!</h1>
-        <img src="assets/image.jpg">
-    </body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Assignment One-Page</title>
+
+    <link rel="stylesheet" href="./css/main.scss" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <!-- Sticky navbar with scroll progress & active section indicator -->
+    <nav id="navbar" class="navbar">
+      <div class="nav-inner">
+        <a class="brand" href="#home"><i class="fa-solid fa-seedling"></i> One-Pager</a>
+        <ul class="nav-links">
+          <li><a href="#home" data-section="home" class="nav-link active">Home</a></li>
+          <li><a href="#about" data-section="about" class="nav-link">About</a></li>
+          <li><a href="#features" data-section="features" class="nav-link">Features</a></li>
+          <li><a href="#gallery" data-section="gallery" class="nav-link">Gallery</a></li>
+          <li><a href="#parallax" data-section="parallax" class="nav-link">Parallax</a></li>
+          <li><a href="#video" data-section="video" class="nav-link">Video</a></li>
+          <li><a href="#contact" data-section="contact" class="nav-link">Contact</a></li>
+        </ul>
+      </div>
+      <div class="scrollbar" aria-hidden="true"><span class="scrollbar__bar"></span></div>
+    </nav>
+
+    <!-- Full-width horizontal stripes -->
+    <header id="home" class="section hero">
+      <div class="hero__content">
+        <h1 class="hero__title">One page website with requirments included</h1>
+        <p class="hero__subtitle">Was written using plain HTML, SCSS, and ES6.</p>
+        <div class="hero__cta">
+          <a class="btn" href="#features">Explore Features</a>
+          <button class="btn btn--ghost" data-open-modal="#infoModal">Open Modal</button>
+        </div>
+      </div>
+    </header>
+
+    <section id="about" class="section section--light">
+      <div class="container">
+        <h2>About</h2>
+        <p>
+          This page has a sticky navbar, position indicator, navbar resizing, smooth scrolling,
+          carousel, multi-column layout, centering, responsiveness, fixed background image, modal windows, HTML5 video, CSS3 animations, and vector icons.
+        </p>
+      </div>
+    </section>
+
+    <section id="features" class="section section--grid">
+      <div class="container">
+        <h2>Features (Multi-Column)</h2>
+        <div class="grid">
+          <article class="card">
+            <i class="fa-solid fa-compass card__icon"></i>
+            <h3>Sticky and Resizing Navbar</h3>
+            <p>Navbar sticks at top and shrinks on scroll. The active link updates by scroll position.</p>
+          </article>
+          <article class="card">
+            <i class="fa-solid fa-arrows-spin card__icon"></i>
+            <h3>Smooth Scrolling</h3>
+            <p>Native smooth scroll to sections with a link highlighting follows the viewport.</p>
+          </article>
+          <article class="card">
+            <i class="fa-solid fa-images card__icon"></i>
+            <h3>Carousel</h3>
+            <p>Three slides with next/prev arrows implemented in JS.</p>
+          </article>
+          <article class="card">
+            <i class="fa-solid fa-vector-square card__icon"></i>
+            <h3>SCSS</h3>
+            <p>Variables, mixins, nesting, responsive breakpoints, and utilities.</p>
+          </article>
+          <article class="card">
+            <i class="fa-solid fa-video card__icon"></i>
+            <h3>HTML5 Video</h3>
+            <p>Embedded video in its own section with responsive sizing.</p>
+          </article>
+          <article class="card">
+            <i class="fa-solid fa-wand-magic-sparkles card__icon"></i>
+            <h3>CSS Animations</h3>
+            <p>Simple fade-in on section reveal, button hover transitions, and carousel slide.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="section section--dark">
+      <div class="container">
+        <h2>Gallery (Carousel)</h2>
+        <div class="carousel" aria-roledescription="carousel">
+          <button class="carousel__control prev" aria-label="Previous slide">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <div class="carousel__track">
+            <div class="carousel__slide is-active">
+              <div class="carousel__slide-inner">Slide One</div>
+            </div>
+            <div class="carousel__slide">
+              <div class="carousel__slide-inner">Slide Two</div>
+            </div>
+            <div class="carousel__slide">
+              <div class="carousel__slide-inner">Slide Three</div>
+            </div>
+          </div>
+          <button class="carousel__control next" aria-label="Next slide">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="parallax" class="section section--parallax">
+      <div class="parallax__overlay">
+        <h2>Fixed Background Image</h2>
+        <p>This stripe uses a fixed background to create a simple parallax effect.</p>
+      </div>
+    </section>
+
+    <section id="video" class="section section--light">
+      <div class="container">
+        <h2>Embedded Video</h2>
+        <video class="video" controls preload="metadata" poster="./assets/image.jpg">
+          <source src="./assets/sample_video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container">
+        <h2>Get in Touch</h2>
+        <p>Click the button below to view additional content in a modal window.</p>
+        <button class="btn" data-open-modal="#infoModal">Open Modal</button>
+      </div>
+    </section>
+
+    <div id="infoModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal__backdrop" data-close-modal></div>
+      <div class="modal__dialog" role="document">
+        <button class="modal__close" aria-label="Close" data-close-modal>
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h3 id="modalTitle">Modal Window</h3>
+        <p>
+          This is an accessible modal with focus trapping and ESC-to-close. Resize the window—
+          the dialog remains centered vertically and horizontally.
+        </p>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <span>&copy; <span id="year"></span> One-Pager</span>
+        <div class="social">
+          <a href="#" aria-label="Twitter" class="social__link"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="Instagram" class="social__link"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn" class="social__link"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="#" aria-label="GitHub" class="social__link"><i class="fa-brands fa-github"></i></a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="./js/main.js" defer></script>
+  </body>
 </html>

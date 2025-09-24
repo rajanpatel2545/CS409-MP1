@@ -1,1 +1,169 @@
 /* Your SCSS here. */
+/* Minimal SCSS with variables + mixins (meets requirements) */
+$dark: #0f172a;
+$light: #f8fafc;
+$text: #0b1020;
+$muted: #e2e8f0;
+$primary: #2563eb;
+$accent: #22c55e;
+
+$shadow: 0 8px 24px rgba(0,0,0,.12);
+$nav-h: 88px;
+$nav-h-sm: 60px;
+
+@mixin container {
+  width: min(1100px, 92vw);
+  margin: 0 auto;
+}
+@mixin respond($w) {
+  @media (max-width: $w) { @content; }
+}
+
+/* global */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: $text;
+  font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: #fff;
+}
+h1, h2, h3 { margin: 0 0 .5rem; line-height: 1.2; }
+h1 { font-size: clamp(2rem, 4vw, 3rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
+h3 { font-size: 1.2rem; }
+
+.section { padding: 96px 0; }
+.section--light { background: $light; }
+.section--dark { background: #111827; color: $muted; }
+
+.container { @include container; text-align: center; }
+
+/* navbar (sticky + resize + active link underline) */
+.navbar {
+  position: sticky; top: 0; z-index: 1000;
+  background: #fff; border-bottom: 1px solid #e5e7eb;
+  transition: height .25s ease, box-shadow .25s ease;
+  height: $nav-h;
+
+  .nav-inner {
+    @include container;
+    display: flex; align-items: center; justify-content: space-between; height: 100%;
+  }
+
+  .brand {
+    display: inline-flex; align-items: center; gap: .5rem;
+    color: $text; text-decoration: none; font-weight: 700;
+    i { color: $accent; }
+  }
+
+  .nav-links {
+    display: flex; gap: 1rem; list-style: none; margin: 0; padding: 0;
+    .nav-link {
+      text-decoration: none; color: $text; font-weight: 600; position: relative;
+      padding: .35rem .2rem; transition: color .2s ease;
+      &:hover { color: $primary; }
+      &.active { color: $primary;
+        &::after { content: ""; position: absolute; left: 0; right: 0; bottom: -10px; height: 3px; background: $primary; border-radius: 2px; }
+      }
+    }
+  }
+
+  &.shrink {
+    height: $nav-h-sm; box-shadow: $shadow;
+    .nav-links .nav-link { font-size: .95rem; }
+  }
+
+  .scrollbar { height: 3px; }
+  .scrollbar__bar { display: block; height: 3px; width: 0%; background: $primary; transition: width .15s linear; }
+}
+
+/* hero (vertical center) */
+.hero {
+  min-height: calc(100dvh - #{$nav-h});
+  display: grid; place-items: center; text-align: center;
+  background: linear-gradient(180deg, #eef2ff, #ffffff);
+  .hero__content { animation: fade-in .5s ease-out both; }
+  .hero__subtitle { color: #475569; margin-bottom: 1rem; }
+  .hero__cta { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+}
+
+/* buttons */
+.btn {
+  --bg: #2563eb;
+  display: inline-block; padding: .8rem 1.1rem; border-radius: 999px;
+  color: #fff; background: var(--bg); text-decoration: none; font-weight: 700; border: 0; cursor: pointer;
+  transition: transform .15s ease, filter .15s ease;
+  &:hover { transform: translateY(-1px); filter: brightness(1.05); }
+  &--ghost { --bg: transparent; color: $primary; border: 2px solid $primary; background: transparent; }
+}
+
+/* multi-column section */
+.section--grid .grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 24px;
+  @include respond(1024px) { grid-template-columns: repeat(2, 1fr); }
+  @include respond(720px) { grid-template-columns: 1fr; }
+}
+.card {
+  background: #fff; border-radius: 14px; padding: 20px; box-shadow: $shadow; text-align: left;
+  .card__icon { font-size: 1.4rem; color: $primary; margin-bottom: .5rem; }
+}
+
+/* carousel */
+.carousel {
+  position: relative; overflow: hidden; border-radius: 14px; box-shadow: $shadow; background: #0b1020;
+  .carousel__track { display: flex; transition: transform .4s ease; }
+  .carousel__slide { min-width: 100%;
+    .carousel__slide-inner {
+      display: grid; place-items: center; height: 300px; color: $muted; font-size: 1.8rem;
+      background: linear-gradient(120deg, #1f2937, #0f172a);
+      animation: fade-in .3s ease both;
+    }
+  }
+  .carousel__control {
+    position: absolute; top: 50%; transform: translateY(-50%); border: 0; width: 42px; height: 42px; border-radius: 999px;
+    display: grid; place-items: center; cursor: pointer;
+    background: rgba(255,255,255,.14); color: #fff; transition: background .2s ease;
+    &:hover { background: rgba(255,255,255,.25); }
+    &.prev { left: 12px; } &.next { right: 12px; }
+  }
+}
+
+/* parallax stripe */
+.section--parallax {
+  min-height: 60vh;
+  background-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop');
+  background-size: cover; background-position: center; background-attachment: fixed;
+  display: grid; place-items: center; text-align: center; color: #fff;
+  .parallax__overlay {
+    background: rgba(0,0,0,.45); padding: 36px; border-radius: 14px; width: min(900px, 92vw);
+  }
+}
+
+/* video */
+.video { width: min(900px, 92vw); height: auto; border-radius: 12px; box-shadow: $shadow; }
+
+/* modal */
+.modal {
+  position: fixed; inset: 0; display: none;
+  &.is-open { display: block; }
+  .modal__backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.45); animation: fade-in .2s ease both; }
+  .modal__dialog {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    background: #fff; width: min(640px, 92vw); padding: 20px; border-radius: 14px; box-shadow: $shadow;
+    animation: scale-in .18s ease both;
+  }
+  .modal__close { position: absolute; top: 10px; right: 12px; border: 0; background: transparent; font-size: 1.2rem; cursor: pointer; color: #334155; }
+}
+
+/* footer + social icons */
+.footer {
+  background: $dark; color: $muted; padding: 24px 0;
+  .footer__inner { @include container; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .social { display: flex; gap: 14px; }
+  .social__link { color: $muted; font-size: 1.1rem; transition: color .2s ease; &:hover { color: $accent; } }
+}
+
+/* simple animations */
+@keyframes fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes scale-in { from { opacity: 0; transform: translate(-50%, -50%) scale(.96); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
