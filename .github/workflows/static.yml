@@ -19,7 +19,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url }}
     runs-on: ubuntu-latest
 
     steps:
@@ -29,40 +29,58 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # Build CSS from SCSS (only if SCSS exists)
-      - name: Install Sass and compile
-        run: |
-          if [ -f src/css/main.scss ]; then
-            npm i -g sass
-            sass src/css/main.scss src/css/main.css
-          fi
-
-      # If your HTML still points to .scss, rewrite it to .css
-      - name: Ensure HTML links to CSS, not SCSS
+      - name: Detect publish directory (src/ or .)
+        id: detect
         run: |
           if [ -f src/index.html ]; then
-            sed -i 's#href="./css/main.scss"#href="./css/main.css"#g' src/index.html
+            echo "publish_dir=src" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish_dir=." >> "$GITHUB_OUTPUT"
+          fi
+          echo "Publishing from: $(cat $GITHUB_OUTPUT | cut -d= -f2)"
+
+      - name: Install Sass (for SCSS → CSS)
+        run: npm i -g sass
+
+      - name: Build CSS if SCSS exists
+        run: |
+          set -e
+          PUB="${{ steps.detect.outputs.publish_dir }}"
+          if [ -f "$PUB/css/main.scss" ]; then
+            echo "Compiling $PUB/css/main.scss → $PUB/css/main.css"
+            sass "$PUB/css/main.scss" "$PUB/css/main.css" --no-source-map
+          else
+            echo "No SCSS at $PUB/css/main.scss; skipping compile."
           fi
 
-      # SPA fallback (optional)
-      - name: 404 fallback
+      - name: Ensure HTML links to CSS (not SCSS)
         run: |
-          if [ -f src/index.html ]; then cp src/index.html src/404.html; fi
+          PUB="${{ steps.detect.outputs.publish_dir }}"
+          if [ -f "$PUB/index.html" ]; then
+            sed -i 's#href="./css/main.scss"#href="./css/main.css"#g' "$PUB/index.html"
+          fi
 
-      # Sanity check (debug)
-      - name: List publish files
+      - name: Add 404 fallback (optional but useful on Pages)
         run: |
-          echo "Publishing these files:"
-          ls -la src
-          [ -d src/css ] && ls -la src/css || true
-          [ -d src/js ] && ls -la src/js || true
-          [ -d src/assets ] && ls -la src/assets || true
+          PUB="${{ steps.detect.outputs.publish_dir }}"
+          if [ -f "$PUB/index.html" ]; then
+            cp "$PUB/index.html" "$PUB/404.html"
+          fi
+
+      - name: List files to be published (debug)
+        run: |
+          PUB="${{ steps.detect.outputs.publish_dir }}"
+          echo "Contents of $PUB:"
+          ls -la "$PUB"
+          [ -d "$PUB/css" ] && ls -la "$PUB/css" || true
+          [ -d "$PUB/js" ] && ls -la "$PUB/js" || true
+          [ -d "$PUB/assets" ] && ls -la "$PUB/assets" || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'src'
+          path: ${{ steps.detect.outputs.publish_dir }}
 
       - name: Deploy to GitHub Pages
-        id: deployment
+        id: deploy
         uses: actions/deploy-pages@v4
