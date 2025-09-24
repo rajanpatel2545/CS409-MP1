@@ -1,6 +1,5 @@
 /* Your SCSS here. */
-/* Minimal SCSS with variables + mixins (meets requirements) */
-/* global */
+
 * {
   box-sizing: border-box;
 }
@@ -8,7 +7,6 @@
 html {
   scroll-behavior: smooth;
 }
-
 body {
   margin: 0;
   color: #0b1020;
