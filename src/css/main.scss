@@ -1,5 +1,4 @@
 /* Your SCSS here. */
-/* Minimal SCSS with variables + mixins (meets requirements) */
 $dark: #0f172a;
 $light: #f8fafc;
 $text: #0b1020;
@@ -156,7 +155,6 @@ h3 { font-size: 1.2rem; }
   .modal__close { position: absolute; top: 10px; right: 12px; border: 0; background: transparent; font-size: 1.2rem; cursor: pointer; color: #334155; }
 }
 
-/* footer + social icons */
 .footer {
   background: $dark; color: $muted; padding: 24px 0;
   .footer__inner { @include container; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -164,6 +162,5 @@ h3 { font-size: 1.2rem; }
   .social__link { color: $muted; font-size: 1.1rem; transition: color .2s ease; &:hover { color: $accent; } }
 }
 
-/* simple animations */
 @keyframes fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes scale-in { from { opacity: 0; transform: translate(-50%, -50%) scale(.96); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
